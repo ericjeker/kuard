@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    ver: "1"
+    app: alpaca
+    env: prod
+  name: alpaca-prod
+spec:
+  replicas: 3
+  # Existing pods that match these selectors are managed with this deployment
+  selector:
+    matchLabels:
+      app: alpaca
+      env: prod
+    matchExpressions:
+      - { key: ver, operator: In, values: [ "1", "2" ] }
+  template:
+    metadata:
+      labels:
+        ver: "1"
+        app: alpaca
+        env: prod
+    spec:
+      containers:
+        - image: gcr.io/kuar-demo/kuard-amd64:blue
+          name: kuard
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            periodSeconds: 2
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            successThreshold: 1

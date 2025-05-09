@@ -35,6 +35,8 @@ terraform.rc
 # Do NOT ignore .terraform.lock.hcl
 # !.terraform.lock.hcl
 
+# IAC
+*.pem
 
 # IDE
 .vscode

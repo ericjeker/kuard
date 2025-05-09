@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: simple-ingress
 spec:
+  # Redirect all traffic to service alpaca-prod on port 8080
   defaultBackend:
     service:
       name: alpaca-prod

@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alpaca-ingress
+spec:
+  # Redirect all traffic to service alpaca-prod on port 8080
+  defaultBackend:
+    service:
+      name: alpaca-prod
+      port:
+        number: 8080
+  tls:
+    - hosts:
+        - prod.alpaca.wowww.ch
+        - staging.alpaca.wowww.ch
+      secretName: cloudflare-origin-cert
+  rules:
+    - host: prod.alpaca.wowww.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: alpaca-prod
+                port:
+                  number: 8080
+    - host: staging.alpaca.wowww.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: alpaca-staging
+                port:
+                  number: 8080

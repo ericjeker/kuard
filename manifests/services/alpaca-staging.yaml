@@ -16,5 +16,4 @@ spec:
     app: alpaca
     env: staging
     ver: "1"
-  sessionAffinity: None
-  type: NodePort
+  type: ClusterIP

@@ -44,3 +44,9 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 ```shell
 kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
 ```
+
+### Add cert-manager:
+
+```shell
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
+```

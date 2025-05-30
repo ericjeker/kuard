@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  a-param: a-value
+  another-param: another-value
+  my-config.txt: |
+    parameter1 = value1
+    parameter2 = value2
+metadata:
+  name: my-config
+

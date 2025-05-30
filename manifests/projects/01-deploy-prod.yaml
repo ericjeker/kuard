@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    ver: "1"
+    app: alpaca
+    env: prod
+  name: alpaca-prod
+spec:
+  # Existing pods that match these selectors are managed with this deployment
+  selector:
+    matchLabels:
+      app: alpaca
+      env: prod
+    matchExpressions:
+      - { key: ver, operator: In, values: [ "1", "2" ] }
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        ver: "1"
+        app: alpaca
+        env: prod
+      # Annotations serve as information logs
+      annotations:
+        kubernetes.io/change-cause: "Update to blue"
+    spec:
+      volumes:
+        - name: my-config
+          configMap:
+            name: my-config
+      containers:
+        - image: gcr.io/kuar-demo/kuard-amd64:blue
+          imagePullPolicy: Always
+          name: kuard
+          env:
+            - name: A-PARAM
+              valueFrom:
+                configMapKeyRef:
+                  key: a-param
+                  name: my-config
+            - name: ANOTHER-PARAM
+              valueFrom:
+                configMapKeyRef:
+                  key: another-param
+                  name: my-config
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # Readiness Probe vs Liveness Probe
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            periodSeconds: 2
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            successThreshold: 1
